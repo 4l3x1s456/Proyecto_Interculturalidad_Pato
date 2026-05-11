@@ -21,7 +21,7 @@ class BrandHeader extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              'Raices Vivas',
+              'CultuAR',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

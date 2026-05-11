@@ -1,6 +1,6 @@
 {
-    "name": "prototipo_inter_proyecto",
-    "short_name": "prototipo_inter_proyecto",
+    "name": "CultuAR",
+    "short_name": "CultuAR",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

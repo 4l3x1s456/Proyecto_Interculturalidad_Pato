@@ -22,8 +22,8 @@ class CultureDetailScreen extends StatelessWidget {
             expandedHeight: 240,
             backgroundColor: culture.accentColor,
             foregroundColor: Colors.white,
+            title: Text(culture.name),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(culture.name),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: AppGradients.header(culture.accentColor),
@@ -33,6 +33,7 @@ class CultureDetailScreen extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Hero(
                           tag: culture.id,
@@ -52,10 +53,27 @@ class CultureDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 14),
                         Expanded(
-                          child: Text(
-                            culture.region,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(color: Colors.white70),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                culture.region,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(color: Colors.white70),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                culture.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

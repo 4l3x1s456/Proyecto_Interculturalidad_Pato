@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'camera_screen.dart';
 import 'cultures_screen.dart';
 import 'profile_screen.dart';
 
@@ -15,12 +16,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const pages = [CulturesScreen(), ProfileScreen()];
-    const titles = ['Culturas', 'Perfil'];
+    const titles = ['Culturas', 'Camara', 'Perfil'];
 
     return Scaffold(
       appBar: AppBar(title: Text(titles[_index])),
-      body: IndexedStack(index: _index, children: pages),
+      body: _buildBody(),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) {
@@ -28,9 +28,22 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.public), label: 'Culturas'),
+          NavigationDestination(icon: Icon(Icons.camera_alt), label: 'Camara'),
           NavigationDestination(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),
     );
+  }
+
+  Widget _buildBody() {
+    switch (_index) {
+      case 1:
+        return const CameraScreen();
+      case 2:
+        return const ProfileScreen();
+      case 0:
+      default:
+        return const CulturesScreen();
+    }
   }
 }
