@@ -26,19 +26,19 @@ class ProfileScreen extends StatelessWidget {
         const InfoTile(
           icon: Icons.storage,
           title: 'Base de datos',
-          subtitle: 'Prototipo en memoria; Firestore pendiente.',
+          subtitle: 'Uso de firestore para el entreno de la IA; Firestore pendiente.',
         ),
         const SizedBox(height: 10),
         const InfoTile(
           icon: Icons.photo_library,
           title: 'Contenido multimedia',
-          subtitle: 'Imagenes locales; listo para Storage.',
+          subtitle: 'Imagenes locales; listo para Storage, proxima sincronizacion para firebase (entrenamiento).',
         ),
         const SizedBox(height: 10),
         const InfoTile(
           icon: Icons.login,
           title: 'Autenticacion',
-          subtitle: 'Registro y acceso local; Firebase Auth despues.',
+          subtitle: 'Registro y acceso local; Firebase Auth despues, (funcionalidad y entreno parecido a Pokemon Go).',
         ),
         const SizedBox(height: 18),
         ElevatedButton.icon(
