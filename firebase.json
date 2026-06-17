@@ -1,0 +1,40 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "alexgames-app-cultuar",
+          "appId": "1:672431700340:android:f6ef4b6f76c23652f9d421",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "alexgames-app-cultuar",
+          "configurations": {
+            "android": "1:672431700340:android:f6ef4b6f76c23652f9d421",
+            "web": "1:672431700340:web:11478c970e35454df9d421",
+            "windows": "1:672431700340:web:03c1b95b1c9e641ef9d421"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.glb",
+        "headers": [
+          { "key": "Access-Control-Allow-Origin", "value": "*" },
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      }
+    ]
+  }
+}

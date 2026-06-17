@@ -15,7 +15,7 @@ class AuthScreen extends StatefulWidget {
 enum AuthMode { signIn, register }
 
 class _AuthScreenState extends State<AuthScreen> {
-  static const bool _allowRegister = false;
+  static const bool _allowRegister = true;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) {
       return;
@@ -49,27 +49,26 @@ class _AuthScreenState extends State<AuthScreen> {
 
     setState(() => _busy = true);
     final auth = AppScope.of(context).auth;
-    String? error;
+    final messenger = ScaffoldMessenger.of(context);
 
-    if (_mode == AuthMode.register) {
-      error = auth.register(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-    } else {
-      error = auth.signIn(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
+    final error = _mode == AuthMode.register
+        ? await auth.register(
+            name: _nameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+          )
+        : await auth.signIn(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+
+    if (!mounted) {
+      return;
     }
-
     setState(() => _busy = false);
 
     if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      messenger.showSnackBar(SnackBar(content: Text(error)));
     }
   }
 

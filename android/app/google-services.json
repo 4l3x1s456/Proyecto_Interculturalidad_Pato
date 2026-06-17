@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "672431700340",
+    "project_id": "alexgames-app-cultuar",
+    "storage_bucket": "alexgames-app-cultuar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672431700340:android:f6ef4b6f76c23652f9d421",
+        "android_client_info": {
+          "package_name": "com.insanos.prototipo_inter_proyecto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-2Fbb6ikmsCQomjI5OELCAIMyo-hlty4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

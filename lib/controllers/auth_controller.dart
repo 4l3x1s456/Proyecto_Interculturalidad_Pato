@@ -1,72 +1,57 @@
 import 'package:flutter/material.dart';
 
+import '../data/services/auth/auth_service.dart';
+import '../data/services/auth/local_auth_service.dart';
 import '../models/user_account.dart';
 
+/// Fachada de autenticacion para la UI (Funcionalidad Uno del ERS).
+///
+/// Delega en un [AuthService] intercambiable: [LocalAuthService] en el
+/// prototipo y `FirebaseAuthService` al activar `AppConfig.useFirebase`. Expone
+/// una API asincrona, lista para el backend real, y notifica cambios de sesion.
 class AuthController extends ChangeNotifier {
-  AuthController() {
-    const seedUser = UserAccount(
-      name: 'Usuario Demo',
-      email: 'demo@raices.app',
-      password: 'demo123',
-    );
-    _usersByEmail[seedUser.email.toLowerCase()] = seedUser;
+  AuthController({AuthService? service})
+    : _service = service ?? LocalAuthService() {
+    _currentUser = _service.currentUser;
   }
 
-  final Map<String, UserAccount> _usersByEmail = {};
+  final AuthService _service;
   UserAccount? _currentUser;
 
   UserAccount? get currentUser => _currentUser;
   bool get isSignedIn => _currentUser != null;
 
-  String? register({
+  Future<String?> register({
     required String name,
     required String email,
     required String password,
-  }) {
-    final normalized = email.trim().toLowerCase();
-    final cleanName = name.trim();
-
-    if (cleanName.isEmpty) {
-      return 'Nombre requerido';
-    }
-    if (!normalized.contains('@')) {
-      return 'Correo no valido';
-    }
-    if (password.length < 6) {
-      return 'Contrasena muy corta';
-    }
-    if (_usersByEmail.containsKey(normalized)) {
-      return 'El correo ya esta registrado';
-    }
-
-    final user = UserAccount(
-      name: cleanName,
-      email: normalized,
+  }) async {
+    final result = await _service.register(
+      name: name,
+      email: email,
       password: password,
     );
-    _usersByEmail[normalized] = user;
-    _currentUser = user;
-    notifyListeners();
-    return null;
+    if (result.isSuccess) {
+      _currentUser = result.user;
+      notifyListeners();
+    }
+    return result.error;
   }
 
-  String? signIn({required String email, required String password}) {
-    final normalized = email.trim().toLowerCase();
-    final user = _usersByEmail[normalized];
-
-    if (user == null) {
-      return 'Usuario no encontrado';
+  Future<String?> signIn({
+    required String email,
+    required String password,
+  }) async {
+    final result = await _service.signIn(email: email, password: password);
+    if (result.isSuccess) {
+      _currentUser = result.user;
+      notifyListeners();
     }
-    if (user.password != password) {
-      return 'Contrasena incorrecta';
-    }
-
-    _currentUser = user;
-    notifyListeners();
-    return null;
+    return result.error;
   }
 
-  void signOut() {
+  Future<void> signOut() async {
+    await _service.signOut();
     _currentUser = null;
     notifyListeners();
   }

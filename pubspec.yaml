@@ -31,7 +31,32 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Camara para la experiencia de Realidad Aumentada (Funcionalidad Tres).
   camera: ^0.11.0+2
+  # Gestion de permisos de camara en runtime (pruebas Sprint 3, RNF-003).
+  permission_handler: ^11.3.1
+
+  # Inferencia del modelo de IA entrenado (Teachable Machine -> TFLite).
+  tflite_flutter: ^0.11.0
+  # Preprocesamiento de los frames de la camara antes de la inferencia.
+  image: ^4.3.0
+
+  # Consumo de APIs publicas (Wikipedia REST y servicio de imagenes).
+  http: ^1.2.2
+
+  # Visor de modelos 3D (.glb) con soporte AR (Scene Viewer / Quick Look),
+  # alineado con RNF-007 del ERS. Funciona en Android, iOS y Web.
+  model_viewer_plus: ^1.10.0
+  # Almacenamiento local para cachear los modelos .glb (se descargan una sola
+  # vez desde Firebase Storage y luego se cargan desde disco).
+  path_provider: ^2.1.5
+
+  # Firebase: autenticacion, Firestore (catalogo/progreso) y trazabilidad.
+  # El sistema queda preparado; la inicializacion esta detras de un flag
+  # (AppConfig.useFirebase) hasta configurar el proyecto. Ver FIREBASE_SETUP.md.
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.4
+  cloud_firestore: ^5.5.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -58,6 +83,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Modelo de IA entrenado y sus etiquetas, empaquetados como assets para
+  # ejecutar la deteccion de culturas desde la camara (Funcionalidad Tres).
+  assets:
+    - modelo/model_unquant.tflite
+    - modelo/labels.txt
+    # Los modelos 3D (.glb) ya NO se empaquetan: se sirven desde Firebase
+    # Hosting y se cachean en disco (lib/data/services/model_cache/). Esto evita
+    # un APK gigante. Ver MODELOS_3D.md.
 
   # To add assets to your application, add an assets section, like this:
   # assets:

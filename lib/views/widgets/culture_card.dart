@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_scope.dart';
 import '../../app/theme.dart';
 import '../../models/culture.dart';
 import '../screens/culture_detail_screen.dart';
 import 'region_chip.dart';
+import 'remote_image.dart';
 
 class CultureCard extends StatelessWidget {
-  const CultureCard({super.key, required this.culture, required this.index});
+  const CultureCard({
+    super.key,
+    required this.culture,
+    required this.index,
+    this.explored = false,
+  });
 
   final Culture culture;
   final int index;
+
+  /// Indicador de progreso personal (Funcionalidad Dos del ERS).
+  final bool explored;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +37,14 @@ class CultureCard extends StatelessWidget {
         );
       },
       child: Card(
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () {
+            final scope = AppScope.of(context);
+            // Progreso personal + trazabilidad (no-op sin Firebase).
+            scope.progress.recordModuleView(culture.id, culture.name);
+            scope.tracking.logModuleView(culture.id);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => CultureDetailScreen(culture: culture),
@@ -43,14 +58,44 @@ class CultureCard extends StatelessWidget {
               children: [
                 Hero(
                   tag: culture.id,
-                  child: Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: culture.accentColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(culture.icon, color: culture.accentColor),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: SizedBox(
+                          width: 64,
+                          height: 64,
+                          child: culture.imageUrl != null
+                              ? RemoteImage(
+                                  url: culture.imageUrl,
+                                  fallbackColor: culture.accentColor,
+                                  fallbackIcon: culture.icon,
+                                )
+                              : Container(
+                                  color: culture.accentColor.withOpacity(0.15),
+                                  child: Icon(
+                                    culture.icon,
+                                    color: culture.accentColor,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      Positioned(
+                        right: -2,
+                        bottom: -2,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            culture.motif,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -67,14 +112,28 @@ class CultureCard extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         culture.summary,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.textSoft,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      RegionChip(
-                        label: culture.region,
-                        color: culture.accentColor,
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 6,
+                        children: [
+                          RegionChip(
+                            label: culture.region,
+                            color: culture.accentColor,
+                          ),
+                          if (explored)
+                            const RegionChip(
+                              label: 'Explorado',
+                              color: Color(0xFF16A34A),
+                              icon: Icons.check_circle,
+                            ),
+                        ],
                       ),
                     ],
                   ),

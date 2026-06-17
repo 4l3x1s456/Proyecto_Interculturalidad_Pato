@@ -1,5 +1,8 @@
 plugins {
     id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    // END: FlutterFire Configuration
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
@@ -19,6 +22,13 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    // El modelo .tflite no se comprime (necesario para mapearlo en memoria) y
+    // los modelos 3D .glb tampoco, para que carguen mas rapido desde el APK.
+    androidResources {
+        noCompress += "tflite"
+        noCompress += "glb"
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.insanos.prototipo_inter_proyecto"
@@ -35,6 +45,17 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+
+            // Se desactiva el shrink de R8 para que no elimine clases que el
+            // modelo de IA (TensorFlow Lite, via JNI/reflexion) o Firebase
+            // necesitan. Las reglas de proguard quedan listas por si en el
+            // futuro se reactiva la minificacion para reducir el tamano.
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }

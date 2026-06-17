@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Requerido para consumir las APIs publicas (Wikipedia REST, imagenes)
+         y, mas adelante, los servicios de Firebase. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <!-- AR opcional: la app funciona en dispositivos sin ARCore (RNF-004). -->
+    <uses-feature android:name="android.hardware.camera.ar" android:required="false"/>
     <application
         android:label="CultuAR"
         android:name="${applicationName}"
@@ -42,5 +48,12 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- Permite resolver Scene Viewer (AR) en Android 11+ para los modelos 3D. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+        <package android:name="com.google.android.googlequicksearchbox"/>
+        <package android:name="com.google.ar.core"/>
     </queries>
 </manifest>

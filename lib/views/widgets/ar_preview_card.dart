@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme.dart';
 import '../../models/culture.dart';
+import '../screens/camera_screen.dart';
 
 class ARPreviewCard extends StatelessWidget {
   const ARPreviewCard({super.key, required this.culture});
@@ -23,7 +24,7 @@ class ARPreviewCard extends StatelessWidget {
                 color: culture.accentColor.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(Icons.camera, color: culture.accentColor),
+              child: Icon(Icons.view_in_ar, color: culture.accentColor),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -31,31 +32,36 @@ class ARPreviewCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Explorar experiencia RA',
+                    'Experiencia de Realidad Aumentada',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Listo para integrar ARCore o ar_flutter_plugin cuando se active la camara.',
+                    'Apunta la camara a una vestimenta o escena de ${culture.name} '
+                    'y el modelo confirmara si corresponde a esta cultura.',
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: AppColors.textSoft),
                   ),
                   const SizedBox(height: 10),
-                  OutlinedButton.icon(
+                  ElevatedButton.icon(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'RA disponible en la siguiente fase del proyecto.',
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => Scaffold(
+                            appBar: AppBar(
+                              title: Text('Detector AR - ${culture.name}'),
+                            ),
+                            // Modo dirigido: limitado a esta cultura.
+                            body: CameraScreen(targetCulture: culture),
                           ),
                         ),
                       );
                     },
-                    icon: const Icon(Icons.play_arrow),
-                    label: const Text('Ver demo RA'),
+                    icon: const Icon(Icons.camera_alt),
+                    label: const Text('Abrir detector AR'),
                   ),
                 ],
               ),

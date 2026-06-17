@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_scope.dart';
 import 'camera_screen.dart';
 import 'cultures_screen.dart';
 import 'profile_screen.dart';
@@ -13,6 +14,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
+  bool _progressLoaded = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_progressLoaded) {
+      _progressLoaded = true;
+      // Sincroniza el progreso del usuario (Firestore) tras iniciar sesion.
+      AppScope.of(context).progress.startSync();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

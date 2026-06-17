@@ -12,6 +12,10 @@
 .swiftpm/
 migrate_working_dir/
 
+# docs
+
+FIREBASE_SETUP.md
+MODELOS_3D.md
 # IntelliJ related
 *.iml
 *.ipr
